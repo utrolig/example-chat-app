@@ -36,7 +36,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, friendName }) => {
     <MessageListContainer ref={scrollContainerRef}>
       <MessageListInner>
         {messages.map(({ text, timestamp }) => (
-          <MessageBubble key={timestamp.toString()}>
+          <MessageBubble key={timestamp}>
             {text.split("\n").map((line, idx) => {
               if (line === "") {
                 // Linebreak
