@@ -12,10 +12,8 @@ const MessageList: React.FC<MessageListProps> = ({ messages, friendName }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    console.log("effect fired");
     const el = scrollContainerRef.current;
     if (el) {
-      console.log("el found", el);
       el.style.scrollBehavior = "smooth";
       el.scrollTop = el.scrollHeight;
       el.style.scrollBehavior = "normal";
