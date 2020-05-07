@@ -1,47 +1,28 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import styled from "styled-components";
 
-type ComposerProps = {
+type ComposerProps = React.HTMLProps<HTMLTextAreaElement> & {
   onMessageSent: (text: string) => void;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  value: string;
 };
 
-const Composer: React.FC<ComposerProps> = ({ onMessageSent }) => {
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [value, setValue] = useState("");
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setValue(e.target.value);
-  };
-
-  const submit = () => {
-    const trimmedValue = value.trim();
-    if (trimmedValue) {
-      onMessageSent(trimmedValue);
-      textareaRef.current!.innerText = "";
-      setValue("");
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    // We only care about the Enter key.
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      submit();
-    }
-  };
-
-  return (
-    <ComposerContainer>
-      <TextArea
-        rows={3}
-        onKeyDown={handleKeyDown}
-        ref={textareaRef}
-        value={value}
-        onChange={handleChange}
-        placeholder="Start typing here..."
-      />
-    </ComposerContainer>
-  );
-};
+const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
+  ({ as: _as, onMessageSent, value, onChange, ...rest }, ref) => {
+    return (
+      <ComposerContainer>
+        <TextArea
+          {...rest}
+          rows={3}
+          value={value}
+          onChange={onChange}
+          placeholder="Start typing here..."
+          ref={ref}
+        />
+      </ComposerContainer>
+    );
+  }
+);
 
 export default Composer;
 

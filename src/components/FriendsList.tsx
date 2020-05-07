@@ -4,6 +4,7 @@ import { Friend } from "../types/friend";
 import { NavLink } from "react-router-dom";
 
 type FriendsListProps = {
+  friendsOrderPredicate: (a: Friend, b: Friend) => number;
   friends: Friend[];
   getMessageCount: (friendId: string) => number;
 };
@@ -11,22 +12,25 @@ type FriendsListProps = {
 const FriendsList: React.FC<FriendsListProps> = ({
   friends,
   getMessageCount,
+  friendsOrderPredicate,
 }) => (
   <FriendsListWrapper>
     <FriendsListTitle>Friends</FriendsListTitle>
     <FriendsListContainer>
-      {friends.map(({ avatarUrl, id, name }) => (
-        <FriendLink key={id} title={name} to={`/friends/${id}`}>
-          <FriendAvatar src={avatarUrl} />
-          <FriendName>{name}</FriendName>
-          {(() => {
-            const messageCount = getMessageCount(id);
-            if (messageCount === 0) return null;
-            if (messageCount > 9) return <MessageCount>9+</MessageCount>;
-            return <MessageCount>{messageCount}</MessageCount>;
-          })()}
-        </FriendLink>
-      ))}
+      {[...friends]
+        .sort(friendsOrderPredicate)
+        .map(({ avatarUrl, id, name }) => (
+          <FriendLink key={id} title={name} to={`/friends/${id}`}>
+            <FriendAvatar src={avatarUrl} />
+            <FriendName>{name}</FriendName>
+            {(() => {
+              const messageCount = getMessageCount(id);
+              if (messageCount === 0) return null;
+              if (messageCount > 9) return <MessageCount>9+</MessageCount>;
+              return <MessageCount>{messageCount}</MessageCount>;
+            })()}
+          </FriendLink>
+        ))}
     </FriendsListContainer>
   </FriendsListWrapper>
 );

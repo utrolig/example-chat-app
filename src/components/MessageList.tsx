@@ -72,6 +72,7 @@ const MessageBubble = styled.p`
   background: rgba(255, 255, 255, 0.05);
   border-radius: 10px;
   display: flex;
+  flex-direction: column;
   padding: 12px;
   margin: 0 0 12px;
 `;
